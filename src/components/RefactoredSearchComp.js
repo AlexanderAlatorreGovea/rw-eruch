@@ -1,7 +1,6 @@
-import "./App.css";
 import { useState } from "react";
 
-const App = () => {
+const RefactoredSearchComp = () => {
   const stories = [
     {
       title: "React",
@@ -75,4 +74,4 @@ const Item = ({ title, url, author, num_comments, points }) => (
   </li>
 );
 
-export default App;
+export default RefactoredSearchComp;
