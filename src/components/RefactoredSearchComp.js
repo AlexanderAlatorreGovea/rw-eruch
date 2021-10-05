@@ -1,4 +1,18 @@
 import { useState, useEffect } from "react";
+useSemiPersistentState;
+
+//Custom hook
+export const useSemiPersistentState = (key, initialState) => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || initialState
+  );
+
+  React.useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value, key]);
+
+  return [value, setValue];
+};
 
 const RefactoredSearchComp = () => {
   const stories = [
@@ -55,8 +69,8 @@ const Search = ({ search, onSearch }) => (
     <input
       id="search"
       type="text"
-      value={props.search}
-      onChange={props.onSearch}
+      value={search}
+      onChange={onSearch}
     />
   </div>
 );

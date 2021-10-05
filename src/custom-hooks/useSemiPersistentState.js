@@ -3,15 +3,16 @@ import React from "react";
 //custom hooks conventions
 //start the custom hook with use
 //return the values as an array
+//to avoid overwritting our value, we need to pass in the key and initialState
 
-const useSemiPersistentState = () => {
-  const [searchTerm, setSearchTerm] = useState(
-    localStorage.getItem("search") || "React"
+export const useSemiPersistentState = (key, initialState) => {
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || initialState
   );
 
-  useEffect(() => {
-    localStorage.setItem("search", searchTerm);
-  }, [searchTerm]);
-};
+  React.useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [value, key]);
 
-export default useSemiPersistentState;
+  return [value, setValue];
+};
