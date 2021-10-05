@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const RefactoredSearchComp = () => {
   const stories = [
@@ -20,7 +20,13 @@ const RefactoredSearchComp = () => {
     },
   ];
 
-  const [searchTerm, setSearchTerm] = useState("React");
+  const [searchTerm, setSearchTerm] = useState(
+    localStorage.getItem("search") || "React"
+  );
+
+  useEffect(() => {
+    localStorage.setItem("search", searchTerm);
+  }, [searchTerm]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -43,7 +49,7 @@ const RefactoredSearchComp = () => {
   );
 };
 
-const Search = (props) => (
+const Search = ({ search, onSearch }) => (
   <div>
     <label htmlFor="search">Search: </label>
     <input
@@ -57,7 +63,7 @@ const Search = (props) => (
 
 const List = ({ list }) => (
   <ul>
-    {list.map(({objectID, ...item}) => (
+    {list.map(({ objectID, ...item }) => (
       <Item key={objectID} {...item} />
     ))}
   </ul>
