@@ -17,7 +17,7 @@ const App = () => {
       objectID: 1,
     },
   ];
-
+  //if the fetched data is not initialized to an empty array but null it wil throw an error
   //searchTerm and setSearchTerm are overwritten and we no longer need useState
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
 
@@ -29,6 +29,14 @@ const App = () => {
     story.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleRemoveStory = (item) => {
+    const newStories = stories.filter(
+      (story) => item.objectID !== story.objectID
+    );
+
+    setStories(newStories);
+  };
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
@@ -37,7 +45,7 @@ const App = () => {
 
       <hr />
 
-      <List list={searchedStories} />
+      <List list={searchedStories} onRemoveItem={handleRemoveStory} />
     </div>
   );
 };
@@ -49,10 +57,10 @@ const Search = ({ search, onSearch }) => (
   </div>
 );
 
-const List = ({ list }) => (
+const List = ({ list, onRemoveItem }) => (
   <ul>
     {list.map((item) => (
-      <Item key={item.objectID} item={item} />
+      <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
     ))}
   </ul>
 );
@@ -65,6 +73,11 @@ const Item = ({ item }) => (
     <span>{item.author}</span>
     <span>{item.num_comments}</span>
     <span>{item.points}</span>
+    <span>
+      <button type="button" onClick={() => onRemoveItem(item)}>
+        Dismiss
+      </button>
+    </span>
   </li>
 );
 
