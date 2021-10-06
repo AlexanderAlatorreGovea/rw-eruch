@@ -2,6 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import DataFetching from "./components/DataFetching/DataFetching";
 import DataFetchingOnClick from "./components/DataFetchingOnClick/DataFetchingOnClick";
+import TypescriptComp from "./components/TypescriptComp/TypescriptComp";
 
 
 const App = () => {
@@ -37,7 +38,8 @@ const App = () => {
   return (
     <div>
       {/* <DataFetching/> */}
-      <DataFetchingOnClick/>
+      <DataFetchingOnClick/> 
+      {/* <TypescriptComp/> */}
       {/* <h1>My Hacker Stories</h1>
       <Search search={searchTerm} onSearch={handleSearch} />
 
