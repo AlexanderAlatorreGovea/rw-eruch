@@ -1,5 +1,8 @@
 import "./App.css";
 import { useState } from "react";
+import DataFetching from "./components/DataFetching/DataFetching";
+import DataFetchingOnClick from "./components/DataFetchingOnClick/DataFetchingOnClick";
+
 
 const App = () => {
   const stories = [
@@ -33,13 +36,14 @@ const App = () => {
 
   return (
     <div>
-      <h1>My Hacker Stories</h1>
-
+      {/* <DataFetching/> */}
+      <DataFetchingOnClick/>
+      {/* <h1>My Hacker Stories</h1>
       <Search search={searchTerm} onSearch={handleSearch} />
 
       <hr />
 
-      <List list={searchedStories} />
+      <List list={searchedStories} /> */}
     </div>
   );
 };

@@ -1,4 +1,6 @@
+//optimized and onSubmit with the form
 import * as React from "react";
+import axios from "axios";
 
 const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
@@ -47,12 +49,10 @@ const storiesReducer = (state, action) => {
   }
 };
 
-//useCallback memoizes the fetch function so the param that needs to
-//be passed to the function is a search term, but in the useEffect hook
-//we need to pass the new function as a param
-
-const DataFetching = () => {
+const DataFetchingOnClick = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
+
+  const [url, setUrl] = React.useState(`${API_ENDPOINT}${searchTerm}`);
 
   const [stories, dispatchStories] = React.useReducer(storiesReducer, {
     data: [],
@@ -60,21 +60,20 @@ const DataFetching = () => {
     isError: false,
   });
 
-  const handleFetchStories = React.useCallback(() => {
-    if (!searchTerm) return;
-
+  const handleFetchStories = React.useCallback(async () => {
     dispatchStories({ type: "STORIES_FETCH_INIT" });
 
-    fetch(`${API_ENDPOINT}${searchTerm}`)
-      .then((response) => response.json())
-      .then((result) => {
-        dispatchStories({
-          type: "STORIES_FETCH_SUCCESS",
-          payload: result.hits,
-        });
-      })
-      .catch(() => dispatchStories({ type: "STORIES_FETCH_FAILURE" }));
-  }, [searchTerm]);
+    try {
+      const result = await axios.get(url);
+
+      dispatchStories({
+        type: "STORIES_FETCH_SUCCESS",
+        payload: result.data.hits,
+      });
+    } catch {
+      dispatchStories({ type: "STORIES_FETCH_FAILURE" });
+    }
+  }, [url]);
 
   React.useEffect(() => {
     handleFetchStories();
@@ -87,22 +86,35 @@ const DataFetching = () => {
     });
   };
 
-  const handleSearch = (event) => {
+  const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  const handleSearchSubmit = (event) => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`);
+
+    event.preventDefault();
+  };
+  console.log("A");
+
+  const getSumComments = (stories) => {
+    console.log("C");
+    return stories.data.reduce(
+      (result, value) => result + value.num_comments,
+      0
+    );
+  };
+
+  const sumComments = React.useMemo(() => getSumComments(stories), [stories]);
   return (
     <div>
-      <h1>My Hacker Stories</h1>
+      <h1>My Hacker Stories {sumComments}</h1>
 
-      <InputWithLabel
-        id="search"
-        value={searchTerm}
-        isFocused
-        onInputChange={handleSearch}
-      >
-        <strong>Search:</strong>
-      </InputWithLabel>
+      <SearchForm
+        searchTerm={searchTerm}
+        onSearchInput={handleSearchInput}
+        onSearchSubmit={handleSearchSubmit}
+      />
 
       <hr />
 
@@ -116,6 +128,23 @@ const DataFetching = () => {
     </div>
   );
 };
+
+const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
+  <form onSubmit={onSearchSubmit}>
+    <InputWithLabel
+      id="search"
+      value={searchTerm}
+      isFocused
+      onInputChange={onSearchInput}
+    >
+      <strong>Search:</strong>
+    </InputWithLabel>
+
+    <button type="submit" disabled={!searchTerm}>
+      Submit
+    </button>
+  </form>
+);
 
 const InputWithLabel = ({
   id,
@@ -148,12 +177,15 @@ const InputWithLabel = ({
   );
 };
 
-const List = ({ list, onRemoveItem }) => (
-  <ul>
-    {list.map((item) => (
-      <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
-    ))}
-  </ul>
+const List = React.memo(
+  ({ list, onRemoveItem }) =>
+    console.log("B") || (
+      <ul>
+        {list.map((item) => (
+          <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
+        ))}
+      </ul>
+    )
 );
 
 const Item = ({ item, onRemoveItem }) => (
@@ -172,4 +204,4 @@ const Item = ({ item, onRemoveItem }) => (
   </li>
 );
 
-export default DataFetching;
+export default DataFetchingOnClick;
