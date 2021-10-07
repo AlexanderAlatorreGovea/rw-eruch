@@ -264,3 +264,5 @@ const Item = ({ item, onRemoveItem }: ItemProps) => (
 );
 
 export default TypescriptComp;
+
+export { storiesReducer, SearchForm, InputWithLabel, List, Item };
