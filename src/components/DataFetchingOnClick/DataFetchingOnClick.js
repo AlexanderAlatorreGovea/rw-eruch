@@ -205,3 +205,4 @@ const Item = ({ item, onRemoveItem }) => (
 );
 
 export default DataFetchingOnClick;
+export { storiesReducer, SearchForm, InputWithLabel, List, Item };

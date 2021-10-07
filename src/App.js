@@ -3,7 +3,7 @@ import { useState } from "react";
 import DataFetching from "./components/DataFetching/DataFetching";
 import DataFetchingOnClick from "./components/DataFetchingOnClick/DataFetchingOnClick";
 import TypescriptComp from "./components/TypescriptComp/TypescriptComp";
-
+import Sorting from './components/Advanced/Sorting'
 
 const App = () => {
   const stories = [
@@ -37,12 +37,13 @@ const App = () => {
 
   return (
     <div>
+      <Sorting/>
       {/* <DataFetching/> */}
-      <DataFetchingOnClick/> 
+      {/* <DataFetchingOnClick/>  */}
       {/* <TypescriptComp/> */}
       {/* <h1>My Hacker Stories</h1>
       <Search search={searchTerm} onSearch={handleSearch} />
-
+        
       <hr />
 
       <List list={searchedStories} /> */}
