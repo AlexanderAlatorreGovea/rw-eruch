@@ -10,7 +10,7 @@ const PARAM_PAGE = "page=";
 const getUrl = (searchTerm, page) =>
   `${API_BASE}${API_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`;
 
-  console.log(getUrl)
+console.log(getUrl);
 const extractSearchTerm = (url) =>
   url
     .substring(url.lastIndexOf("?") + 1, url.lastIndexOf("&"))
@@ -89,7 +89,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
 
   const [urls, setUrls] = React.useState([getUrl(searchTerm, 0)]);
-    console.log(urls)
+  console.log(urls);
   const [stories, dispatchStories] = React.useReducer(storiesReducer, {
     data: [],
     page: 0,
